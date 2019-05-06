@@ -6,10 +6,6 @@ phases:
   pre_build:
     commands:
     #setup maven
-      #- ls -l /usr/bin
-      - echo "10.193.69.43   artifactory-qa.bmogc.net" >> /etc/hosts
-      - export M2_HOME=/opt/maven
-      - export PATH=${M2_HOME}/bin:${PATH}
       - mvn -s mvn-settings.xml -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile=src/main/resources/smartcore-eligibility-2.0.3.jar -DgroupId=net.bmogc.smartcore.api.eligibility -DartifactId=smartcore-eligibility -Dversion=2.0.3 -Dpackaging=jar
     #run maven package command to prep jar files
   build:
