@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      
+  pre_build:
+    commands:
+    #run maven package command to prep jar files
+      - mvn clean package
+      - find . -mtime +10950 -exec touch {} \;
+  build:
+    commands:
+      - aws cloudformation package --template-file template.yml --s3-bucket $S3_BUCKET --s3-prefix $PROJECT_NAME --output-template-file template-export.yml #"template-export.yml" name req'd by CodePipeline
+artifacts:
+  type: zip
+  files:
+    - template.yml
+    - template-export.yml
+    - pom.xml
+    - lib/*
+    - target/*

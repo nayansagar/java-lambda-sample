@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  deduceEligibility:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.bsns.LambdaRequestHandler::handleRequest
+      Runtime: java8
+      FunctionName: lambdaTry
+      Timeout: 30
+      Events:
+        testEvent:
+          Type: SNS
+          Properties:
+            Topic: !Ref testTopic
+            
+   testTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: testTopic
