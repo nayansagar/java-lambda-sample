@@ -10,7 +10,7 @@ phases:
       - find . -mtime +10950 -exec touch {} \;
   build:
     commands:
-      - aws cloudformation package --template-file template.yml --s3-bucket $S3_BUCKET --s3-prefix $PROJECT_NAME --output-template-file template-export.yml #"template-export.yml" name req'd by CodePipeline
+      - aws cloudformation package --template-file template.yml --s3-bucket codepipeline-us-east-1-118146841898 --s3-prefix java-lambda-sample --output-template-file template-export.yml #"template-export.yml" name req'd by CodePipeline
 artifacts:
   type: zip
   files:
