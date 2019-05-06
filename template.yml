@@ -15,7 +15,7 @@ Resources:
           Properties:
             Topic: !Ref testTopic
             
-   testTopic:
-    Type: AWS::SNS::Topic
-    Properties:
+  testTopic:
+   	Type: AWS::SNS::Topic
+   	Properties:
       TopicName: testTopic
