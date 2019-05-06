@@ -5,17 +5,29 @@ phases:
       
   pre_build:
     commands:
+    #setup maven
+      #- ls -l /usr/bin
+      - echo "10.193.69.43   artifactory-qa.bmogc.net" >> /etc/hosts
+      - export M2_HOME=/opt/maven
+      - export PATH=${M2_HOME}/bin:${PATH}
+      - mvn -s mvn-settings.xml -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile=src/main/resources/smartcore-eligibility-2.0.3.jar -DgroupId=net.bmogc.smartcore.api.eligibility -DartifactId=smartcore-eligibility -Dversion=2.0.3 -Dpackaging=jar
     #run maven package command to prep jar files
-      - mvn clean package
-      - find . -mtime +10950 -exec touch {} \;
   build:
     commands:
       - aws cloudformation package --template-file template.yml --s3-bucket codepipeline-us-east-1-118146841898 --s3-prefix java-lambda-sample --output-template-file template-export.yml #"template-export.yml" name req'd by CodePipeline
+      - ls -a
+      - mvn -s mvn-settings.xml clean package -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true
+      #- /usr/bin/zipdetails target/eligibility-lambda-aws-lambda-package.zip | grep Filename
+      - find . -mtime +10950 -exec touch {} \;
+  post_build:
+    commands:
+      - mkdir -p deploy
+      - cp -r target/classes/* deploy/
+      - cp template-export.yml deploy/
+      - cp -r target/lib deploy/
+      - ls -ltr deploy
 artifacts:
   type: zip
   files:
-    - template.yml
-    - template-export.yml
-    - pom.xml
-    - lib/*
-    - target/*
+    - '**/*'
+  base-directory : 'deploy'
